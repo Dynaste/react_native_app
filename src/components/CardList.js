@@ -29,17 +29,21 @@ const CardList = ({showDetailsList}) => {
     >
       {todos.map((todo, i) => (
         <TouchableOpacity
-          style={{
-            backgroundColor: "blue",
+          style={{ 
+            backgroundColor: "#c9e4de",
             height: height / 6,
             width: width / 2.4,
             borderRadius: 5,
             margin: 5,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            padding: 5
           }}
           key={i}
           onPress={() => showDetailsList(todo)}
         >
-          <Text>{todo.title}</Text>
+          <Text style={{color: "#5C5C5C", fontSize: 18, fontWeight: "600"}}>{todo.title}</Text>
         </TouchableOpacity>
       ))}
     </View>

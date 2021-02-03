@@ -8,6 +8,7 @@ import {
 } from "react-native";
 
 import { useSelector, useDispatch } from "react-redux";
+import { Ionicons } from "@expo/vector-icons";
 const { width, height } = Dimensions.get("screen");
 
 import CardList from "./../components/CardList";
@@ -55,18 +56,22 @@ const HomeScreen = ({ navigation }) => {
       <CardList showDetailsList={showDetailsList}/>
 
       </ScrollView>
-      <TouchableOpacity
+      <View
         style={{
           position: "absolute",
           bottom: 125,
-          right: 25,
-          backgroundColor: "black",
+          right: 20,
           width: 60,
           height: 60,
           borderRadius: "50%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
         }}
-        onPress={() => addTodo()}
-      />
+        onPress={() => navigation.navigate("Add list")}
+      >
+         <Ionicons name="add-circle-outline" size={45} color="#6E6E6E" onPress={() => navigation.navigate("Add list")} />
+      </View>
     </View>
   );
 };
