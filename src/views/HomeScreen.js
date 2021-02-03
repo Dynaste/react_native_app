@@ -1,30 +1,54 @@
-import React, {useEffect, useState} from "react";
+import React, { useState } from "react";
 import {
   View,
   ScrollView,
   Dimensions,
+  Button,
+  Pressable,
+  Text,
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
-const { height } = Dimensions.get("screen");
+const { width, height } = Dimensions.get("screen");
 
 import CardList from "./../components/CardList";
 
 const HomeScreen = ({ navigation }) => {
-  const [goToList, setGoToList] = useState(false);
-  
-  const showDetailsList = (list) => {
-    navigation.navigate('Todo list', {
-      itemId: list,
-    });
-  }
+  const [isEditing, setIsEditing] = useState(false);
 
+  const showDetailsList = (list) => {
+    navigation.navigate("Todo list", {
+      item: list,
+    });
+  };
 
   return (
-    <View style={{minHeight: height, padding: 5}}>
-      <ScrollView>
-      <CardList showDetailsList={showDetailsList}/>
+    <View style={{ minHeight: height}}>
+      {isEditing && (
+        <Pressable
+          style={{
+            position: "fixed",
+            width: width,
+            height: 50,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#c6def1"
+          }}
+          title="Annuler"
+          onPress={() => setIsEditing(false)}
+        >
+          <Text style={{color: "#6E6E6E", fontSize: 20, fontWeight: "700"}}>Annuler</Text>
+        </Pressable>
+      )}
 
+      <ScrollView>
+        <CardList
+          showDetailsList={showDetailsList}
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
+        />
       </ScrollView>
       <View
         style={{
@@ -36,11 +60,16 @@ const HomeScreen = ({ navigation }) => {
           borderRadius: "50%",
           display: "flex",
           justifyContent: "center",
-          alignItems: "center"
+          alignItems: "center",
         }}
         onPress={() => navigation.navigate("Add list")}
       >
-         <Ionicons name="add-circle-outline" size={45} color="#6E6E6E" onPress={() => navigation.navigate("Add list")} />
+        <Ionicons
+          name="add-circle-outline"
+          size={45}
+          color="#6E6E6E"
+          onPress={() => navigation.navigate("Add list")}
+        />
       </View>
     </View>
   );

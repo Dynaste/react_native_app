@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
-  Text,
   Button,
   TextInput,
   Dimensions,
@@ -10,12 +9,12 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { colors } from "./../config/colors";
 import { icons } from "./../config/icon";
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 const NewList = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -51,7 +50,7 @@ const NewList = ({ navigation }) => {
       title: title,
       color: userChoice.color,
       icon: userChoice.icon,
-      todos: [],
+      list: [],
     };
     await modifyStore("add_todo", todoObj);
     navigation.navigate("Home")

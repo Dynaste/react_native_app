@@ -45,10 +45,9 @@ function todos(state = initialState, action) {
       return { ...state, todos: newArray };
 
     case "delete_todo": // Expected payload = item.id
-      return {
-        ...state,
-        todos: state.todos.filter((todo) => todo.id !== payload),
-      };
+      return [
+        ...state.filter((todo) => todo.id !== payload)
+      ];
 
     case "reset_todo":
       return initialState;

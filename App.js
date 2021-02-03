@@ -13,7 +13,7 @@ import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
 import TodosReducer from "./src/reducers/TodosReducer";
 
-export default function App({navigation}) {
+export default function App() {
 
   const Stack = createStackNavigator();
   const ModalStack = createStackNavigator();
@@ -56,15 +56,7 @@ export default function App({navigation}) {
     <NavigationContainer>
       <Provider store={store}>
         <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={HomeScreen}  options={{
-          headerRight: () => (
-            <Button
-              onPress={() => setEditIsActive(!editIsActive)}
-              title={editIsActive ? "annuler" : "edit"}
-              color="black"
-            />
-          ),
-        }} />
+          <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen
             name="Add list"
             component={ModalScreen}
