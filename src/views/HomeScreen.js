@@ -17,6 +17,7 @@ const HomeScreen = ({ navigation }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const showDetailsList = (list) => {
+    setIsEditing(false);
     navigation.navigate("Todo list", {
       item: list,
     });
