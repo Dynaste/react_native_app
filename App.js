@@ -1,4 +1,6 @@
-import React from "react";
+import React, {useState} from "react";
+
+import {Button} from "react-native";
 
 import HomeScreen from "./src/views/HomeScreen";
 import NewList from "./src/views/NewListScreen";
@@ -7,25 +9,25 @@ import TodoList from "./src/views/TodoListScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-
 import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
 import TodosReducer from "./src/reducers/TodosReducer";
 
-export default function App() {
+export default function App({navigation}) {
+
   const Stack = createStackNavigator();
   const ModalStack = createStackNavigator();
+  const [editIsActive, setEditIsActive]= useState(false);
 
   const reducer = combineReducers({
-    todosList: TodosReducer,
+    todosList: TodosReducer
   });
 
   const ModalScreen = () => {
     return (
       <ModalStack.Navigator
         headerMode="none"
-        initialRouteName="Add todo"
-      >
+        initialRouteName="Add todo">
         <ModalStack.Screen name="NewList" component={NewList} />
       </ModalStack.Navigator>
     );
@@ -54,7 +56,15 @@ export default function App() {
     <NavigationContainer>
       <Provider store={store}>
         <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Home" component={HomeScreen}  options={{
+          headerRight: () => (
+            <Button
+              onPress={() => setEditIsActive(!editIsActive)}
+              title={editIsActive ? "annuler" : "edit"}
+              color="black"
+            />
+          ),
+        }} />
           <Stack.Screen
             name="Add list"
             component={ModalScreen}

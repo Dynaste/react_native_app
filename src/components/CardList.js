@@ -7,15 +7,12 @@ import {
   ScrollView,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
+import { Ionicons } from "@expo/vector-icons";
 
 const { width, height } = Dimensions.get("window");
 
-const CardList = ({showDetailsList}) => {
+const CardList = ({ showDetailsList }) => {
   const todos = useSelector((state) => state.todosList);
-
-  useEffect(() => {
-    console.log(height);
-  }, []);
 
   return (
     <View
@@ -24,26 +21,35 @@ const CardList = ({showDetailsList}) => {
         justifyContent: "space-around",
         flexWrap: "wrap",
         marginTop: 25,
-        marginBottom: 115
+        marginBottom: 115,
       }}
     >
       {todos.map((todo, i) => (
         <TouchableOpacity
-          style={{ 
-            backgroundColor: "#c9e4de",
+          style={{
+            backgroundColor: todo.color,
             height: height / 6,
             width: width / 2.4,
             borderRadius: 5,
             margin: 5,
             display: "flex",
             flexDirection: "row",
-            justifyContent: "center",
-            padding: 5
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            padding: 5,
           }}
           key={i}
           onPress={() => showDetailsList(todo)}
         >
-          <Text style={{color: "#5C5C5C", fontSize: 18, fontWeight: "600"}}>{todo.title}</Text>
+          <View style={{width: "100%", height:"50%", display: "flex",justifyContent: "center", alignItems: "center"}}>
+            <Ionicons name={todo.icon} size={38} color="#5C5C5C" />
+          </View>
+          <View style={{width: "100%", display: "flex",justifyContent: "center", alignItems: "center"}}>
+            <Text style={{ color: "#5C5C5C", fontSize: 18, fontWeight: "600" }}>
+              {todo.title}
+            </Text>
+          </View>
         </TouchableOpacity>
       ))}
     </View>

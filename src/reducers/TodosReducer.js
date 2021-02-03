@@ -2,21 +2,29 @@ const initialState = [
   {
     id: 1,
     title: "Learn React",
+    color: "#f9c6c9",
+    icon: "bulb-outline",
     list: [],
   },
   {
     id: 2,
     title: "Learn Vue",
+    color: "#faedcb",
+    icon: "bulb-outline",
     list: [{ id: 1, content: "Faire mes courses", done: false },{ id: 2, content: "Faire du sport", done: false }],
   },
   {
     id: 3,
     title: "Learn Docker",
+    color: "#f9c6c9",
+    icon: "build-outline",
     list: [{ id: 1, content: "Faire mes courses", done: false },{ id: 2, content: "Faire du sport", done: false }],
   },
   {
     id: 4,
     title: "Learn Angular",
+    color: "#d2d2cf",
+    icon: "bulb-outline",
     list: [{ id: 1, content: "Faire mes courses", done: false },{ id: 2, content: "Faire du sport", done: false }],
   },
   

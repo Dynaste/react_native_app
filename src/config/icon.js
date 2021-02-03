@@ -1,0 +1,1 @@
+export const icons = ["alarm-outline", "basket-outline", "bed-outline", "body-outline", "book-outline", "briefcase-outline", "bulb-outline", "build-outline", "calendar-outline", "clipboard-outline", "fitness-outline", "headset-outline", "home-outline", "journal-outline", "key-outline", "paw-outline", "airplane-outline", "analytics-outline"]
