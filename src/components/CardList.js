@@ -1,17 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import * as Animatable from "react-native-animatable";
-import {
-  View,
-  Text,
-  Dimensions,
-  Pressable,
-  Button,
-  StyleSheet,
-} from "react-native";
+import { View, Text, Dimensions, Pressable, StyleSheet } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 
 const { width, height } = Dimensions.get("window");
+
+import { editableCard } from "./../config/animations";
 
 const CardList = ({ showDetailsList, isEditing, setIsEditing }) => {
   const dispatch = useDispatch();
@@ -25,60 +20,20 @@ const CardList = ({ showDetailsList, isEditing, setIsEditing }) => {
     await modifyStore("delete_todo", id);
   };
 
-  const zoomOut = {
-    0: {
-      rotateZ: "0deg",
-      scale: 1,
-    },
-    0.1: {
-      rotateZ: "2deg",
-      scale: 1,
-    },
-    0.2: {
-      rotateZ: "0deg",
-      scale: 1,
-    },
-    0.3: {
-      rotateZ: "1deg",
-      scale: 1,
-    },
-    0.4: {
-      rotateZ: "-1deg",
-      scale: 1,
-    },
-    0.5: {
-      rotateZ: "1deg",
-      scale: 1,
-    },
-    0.6: {
-      rotateZ: "2deg",
-      scale: 1,
-    },
-    0.7: {
-      rotateZ: "-2deg",
-      scale: 1,
-    },
-    0.8: {
-      rotateZ: "2deg",
-      scale: 1,
-    },
-    1: {
-      rotateZ: "-2deg",
-      scale: 1,
-    },
-  };
-
   return (
     <View style={styles.cardContainer}>
       {todos.map((todo, i) => (
+        
+          todo && todo.id && (
+        
         <Animatable.View
           iterationCount="infinite"
-          animation={isEditing && zoomOut}
+          animation={isEditing ? editableCard : ""}
           easing="ease-in"
           duration={1000}
+          key={i}
         >
           <Pressable
-            key={i}
             style={{
               backgroundColor: todo.color,
               height: height / 6.5,
@@ -143,6 +98,7 @@ const CardList = ({ showDetailsList, isEditing, setIsEditing }) => {
             </View>
           </Pressable>
         </Animatable.View>
+          )
       ))}
     </View>
   );
@@ -160,5 +116,3 @@ const styles = StyleSheet.create({
 });
 
 export default CardList;
-
-// <Animatable.Text animation="pulse" easing="ease-out" iterationCount="infinite" style={{ textAlign: 'center' }}>❤️</Animatable.Text>

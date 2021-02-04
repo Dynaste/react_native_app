@@ -1,6 +1,4 @@
-import React, {useState} from "react";
-
-import {Button} from "react-native";
+import React, { useState } from "react";
 
 import HomeScreen from "./src/views/HomeScreen";
 import NewList from "./src/views/NewListScreen";
@@ -14,20 +12,16 @@ import { Provider } from "react-redux";
 import TodosReducer from "./src/reducers/TodosReducer";
 
 export default function App() {
-
   const Stack = createStackNavigator();
   const ModalStack = createStackNavigator();
-  const [editIsActive, setEditIsActive]= useState(false);
 
   const reducer = combineReducers({
-    todosList: TodosReducer
+    todosList: TodosReducer,
   });
 
   const ModalScreen = () => {
     return (
-      <ModalStack.Navigator
-        headerMode="none"
-        initialRouteName="Add todo">
+      <ModalStack.Navigator headerMode="none" initialRouteName="Add todo">
         <ModalStack.Screen name="NewList" component={NewList} />
       </ModalStack.Navigator>
     );
