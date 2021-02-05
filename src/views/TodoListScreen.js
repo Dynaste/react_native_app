@@ -47,12 +47,20 @@ const TodoList = ({ route }) => {
     }, 1500);
   };
 
-  const onSwipeRight = () => {
+  const onSwipeRight = async(id) => {
     setIsSwipe({
       ...isSwipe,
       myText: "Validation",
       backgroundColor: "#faedcb",
     });
+    let sendableObj = {
+      id: id,
+      todo: listItem[listItem.findIndex((list) => list.id === item.id)],
+    };
+    await modifyStore("animation_delet_item", sendableObj);
+    setTimeout(async function() {
+      await modifyStore("delete_list_item", sendableObj);
+    }, 1500);
   };
 
   const addItemTodo = async () => {
@@ -105,7 +113,7 @@ const TodoList = ({ route }) => {
                   onSwipeLeft={() => {
                     onSwipeLeft(data.id);
                   }}
-                  onSwipeRight={() => onSwipeRight()}
+                  onSwipeRight={() => {onSwipeRight(data.id)}}
                   config={config}
                   style={{
                     width: width,
