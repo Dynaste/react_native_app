@@ -1,20 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Button,
   TextInput,
   Dimensions,
-  TouchableOpacity,
   ScrollView,
+  StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { colors } from "./../config/colors";
-import { icons } from "./../config/icon";
+import IconContainer from "./../components/IconContainer";
+import ColorContainer from "../components/ColorContainer";
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 const NewList = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -23,6 +23,13 @@ const NewList = ({ navigation }) => {
     icon: "newspaper-outline",
   });
   const [title, setTitle] = React.useState("");
+
+  const todos = useSelector((state) => state.todosList.todosList);
+
+  useEffect(()=>{
+    console.log(todos);
+  },[todos])
+
 
   const setPref = (choice) => {
     if (choice.includes("#")) {
@@ -53,12 +60,13 @@ const NewList = ({ navigation }) => {
       list: [],
     };
     await modifyStore("add_todo", todoObj);
-    navigation.navigate("Home")
+    navigation.navigate("Home");
   };
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <ScrollView>
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center", paddingBottom: 25}}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Button title="reset" onPress={()=>modifyStore("reset_todo", {})}/>
         <View
           style={{
             flex: 1,
@@ -90,78 +98,32 @@ const NewList = ({ navigation }) => {
         </View>
         <View style={{ marginTop: 45 }}>
           <TextInput
-            style={{
-              height: 40,
-              borderColor: "gray",
-              borderWidth: 1,
-              borderRadius: 5,
-              width: width - 80,
-              textAlign: "center",
-            }}
+            style={styles.titleInput}
             onChangeText={(text) => setTitle(text)}
             placeholder="Enter a title"
             value={title}
           />
         </View>
-        <View
-          style={{
-            borderRadius: 5,
-            borderWidth: 1,
-            width: width - 80,
-            marginTop: 45,
-            display: "flex",
-            justifyContent: "space-around",
-            alignItems: "center",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            padding: 5,
-          }}
-        >
-          {colors.map((color, i) => (
-            <TouchableOpacity
-              key={i}
-              style={{
-                width: 60,
-                height: 60,
-                borderRadius: 5,
-                backgroundColor: color,
-                margin: 2,
-              }}
-              onPress={() => setPref(color)}
-            />
-          ))}
-        </View>
-        <View
-          style={{
-            borderRadius: 5,
-            borderWidth: 1,
-            width: width - 80,
-            marginTop: 45,
-            display: "flex",
-            justifyContent: "space-around",
-            alignItems: "center",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            padding: 5,
-          }}
-        >
-          {icons.map((icon, i) => (
-            <View style={{ margin: 5 }} key={i}>
-              <Ionicons
-                name={icon}
-                size={38}
-                color="#5C5C5C"
-                onPress={() => setPref(icon)}
-              />
-            </View>
-          ))}
-        </View>
-        <View style={{marginTop: 50}}>
+        <ColorContainer userChoice={userChoice} setUserChoice={setUserChoice} />
+        <IconContainer userChoice={userChoice} setUserChoice={setUserChoice} />
+
+        <View style={{ marginTop: 50 }}>
           <Button title="Créer la liste" onPress={() => addTodo()} />
         </View>
       </ScrollView>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  titleInput: {
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 5,
+    width: width - 80,
+    textAlign: "center",
+  },
+});
 
 export default NewList;

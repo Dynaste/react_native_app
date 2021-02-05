@@ -1,4 +1,5 @@
-const initialState = [
+const initialState = {
+  todosList: [
   {
     id: 1,
     title: "Learn React",
@@ -15,45 +16,55 @@ const initialState = [
       { id: 1, content: "Faire mes courses", done: false, isDelet: false },
       { id: 2, content: "Faire du sport", done: false, isDelet: false },
     ],
-  }
-];
+  }]
+};
 
 function todos(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
     case "add_todo": // Expected payload = obj
-      return [...state, payload];
+      return {...state, todosList: [ {...payload} , ...state.todosList] };
 
-    case "update_todo": // Expected payload  = obj
-      const index = state.findIndex((todo) => todo.id === payload.id);
-      const newArray = [...state.todos];
-      newArray[index] = payload;
-      return { ...state, todos: newArray };
+    case "delete_todo": 
+      return {
+        ...state,
+        todosList: state.todosList.filter((todo) => todo.id !== payload),
+      }
 
-    case "delete_todo": // Expected payload = item.id
-      return [...state.filter((todo) => todo.id !== payload)];
+    case "delete_list_item":
+      const todoIndex = state.todosList.findIndex((todo) => todo.id === payload.todo.id);
+      const newList = state.todosList[todoIndex];
+      newList.list = newList.list.filter((item) => item.isDelet !== true);
+      state = {
+        ...state,
+        todosList: state.todosList.filter((todo) => todo.id !== payload.todo.id),
+      }
 
-    case "delete_list_item": // Expected payload = item.id
-      const todoIndex = state.findIndex((todo) => todo.id === payload.todo.id);
-      const newList = state[todoIndex];
-      newList.list = newList.list.filter((item) => item.id !== payload.id);
+      return {...state, todosList: [{...newList}, ...state.todosList]}
 
-      return [...state, [(state[todoIndex] = newList)]];
 
-    case "animation_delet_item": // Expected payload = item.id
-      const animationIndex = state.findIndex(
-        (todo) => todo.id === payload.todo.id
-      );
-      const animationList = state[animationIndex];
-      animationList.list[
-        animationList.list.findIndex((todo) => todo.id === payload.id)
-      ].isDelet = true;
+    case "animation_delet_item":
 
-      return [...state, [(state[animationIndex] = animationList)]];
+      const animationIndex = state.todosList.findIndex((todo) => todo.id === payload.todo.id);
+      const animationList = state.todosList[animationIndex];
+
+      animationList.list[animationList.list.findIndex((todo) => todo.id === payload.id)].isDelet = true;
+      state = {
+        ...state,
+        todosList: state.todosList.filter((todo) => todo.id !== payload.todo.id),
+      }
+
+     return {...state, todosList: [{...animationList}, ...state.todosList]}
 
     case "add_item_todo":
-      const findId = state.findIndex((todo) => todo.id === payload.listId);
-      return [...state, [state[findId].list = [...state[findId].list, payload.newTodo]]]
+      const findId = state.todosList.findIndex((todo) => todo.id === payload.listId);
+      const addList = state.todosList[findId];
+      addList.list = [...addList.list, payload.newTodo];
+      state = {
+        ...state,
+        todosList: state.todosList.filter((todo) => todo.id !== payload.listId),
+      }
+      return {...state, todosList: [{...addList}, ...state.todosList] }
 
     case "reset_todo":
       return initialState;
@@ -64,3 +75,6 @@ function todos(state = initialState, action) {
 }
 
 export default todos;
+
+// const findId = state.findIndex((todo) => todo.id === payload.listId);
+//       return [...state, [state[findId].list = [...state[findId].list, payload.newTodo]]]

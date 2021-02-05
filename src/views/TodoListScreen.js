@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   Modal,
   Button,
   TextInput,
+  ScrollView,
 } from "react-native";
 import GestureRecognizer from "react-native-swipe-gestures";
 import { useSelector, useDispatch } from "react-redux";
@@ -16,7 +17,7 @@ const { width, height } = Dimensions.get("screen");
 
 const TodoList = ({ route }) => {
   const { item } = route.params;
-  const listItem = useSelector((state) => state.todosList);
+  const listItem = useSelector((state) => state.todosList.todosList);
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [newTodo, setNewTodo] = useState("");
@@ -41,8 +42,8 @@ const TodoList = ({ route }) => {
       todo: listItem[listItem.findIndex((list) => list.id === item.id)],
     };
     await modifyStore("animation_delet_item", sendableObj);
-    setTimeout(function () {
-      modifyStore("delete_list_item", sendableObj);
+    setTimeout(async function() {
+      await modifyStore("delete_list_item", sendableObj);
     }, 1500);
   };
 
@@ -62,11 +63,11 @@ const TodoList = ({ route }) => {
         id: newId,
         content: newTodo,
         done: false,
-        isDelet: false
-      }
+        isDelet: false,
+      },
     };
     await modifyStore("add_item_todo", todoToSend);
-    setNewTodo('');
+    setNewTodo("");
     setModalVisible(false);
   };
 
@@ -76,93 +77,70 @@ const TodoList = ({ route }) => {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: height,
-      }}
-    >
-      <View
-        style={{
-          position: "absolute",
-          top: 0,
-          width: width,
-          height: 50,
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: item.color,
-        }}
-      >
-        <Text style={{ fontSize: 26, color: "#5C5C5C", fontWeight: "600" }}>
-          {item.title}
-        </Text>
+    <View style={styles.container}>
+      <View style={[styles.titleContainer, { backgroundColor: item.color }]}>
+        <Text style={styles.titleFont}>{item.title}</Text>
       </View>
-
       {listItem[listItem.findIndex((list) => list.id === item.id)].list.length >
-        0 &&
-        listItem[listItem.findIndex((list) => list.id === item.id)].list.map(
-          (data, i) => (
-            <View
-              key={i}
-              style={{
-                width: width,
-                height: 65,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "#e2e2df",
-                margin: 1,
-              }}
-            >
-              <GestureRecognizer
-                onSwipeLeft={() => {
-                  onSwipeLeft(data.id);
-                }}
-                onSwipeRight={() => onSwipeRight()}
-                config={config}
+        0 && (
+        <ScrollView style={styles.scrollView} directionalLockEnabled={true} >
+          {listItem[listItem.findIndex((list) => list.id === item.id)].list
+            .length > 0 &&
+            listItem[
+              listItem.findIndex((list) => list.id === item.id)
+            ].list.map((data, i) => (
+              <View
+                key={i}
                 style={{
                   width: width,
                   height: 65,
-                  flex: 1,
-                  flexDirection: "row",
+                  display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  backgroundColor: data.isDelet
-                    ? isSwipe.backgroundColor
-                    : "#e2e2df",
+                  backgroundColor: "#e2e2df",
+                  margin: 1,
                 }}
               >
-                <Text
+                <GestureRecognizer
+                  onSwipeLeft={() => {
+                    onSwipeLeft(data.id);
+                  }}
+                  onSwipeRight={() => onSwipeRight()}
+                  config={config}
                   style={{
-                    textAlign: "center",
-                    fontSize: 18,
-                    color: "#5C5C5C",
+                    width: width,
+                    height: 65,
+                    flex: 1,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: data.isDelet
+                      ? isSwipe.backgroundColor
+                      : "#e2e2df",
                   }}
                 >
-                  {data.isDelet ? isSwipe.myText : data.content}
-                </Text>
-              </GestureRecognizer>
-            </View>
-          )
-        )}
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      fontSize: 18,
+                      color: "#5C5C5C",
+                    }}
+                  >
+                    {data.isDelet ? isSwipe.myText : data.content}
+                  </Text>
+                </GestureRecognizer>
+              </View>
+            ))}
+        </ScrollView>
+      )}
+
       {listItem[listItem.findIndex((list) => list.id === item.id)].list
-        .length === 0 && <Text>C'est vide ... </Text>}
-      <View
-        style={{
-          position: "absolute",
-          bottom: 125,
-          right: 20,
-          width: 60,
-          height: 60,
-          borderRadius: "50%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+        .length === 0 && (
+        <Text style={{ fontSize: 20, color: "#5C5C5C", fontWeight: "600" }}>
+          C'est vide ...{" "}
+        </Text>
+      )}
+      <View style={[styles.newTodoButton, { borderRadius: "50%" }]}>
         <Ionicons
           name="add-circle-outline"
           size={45}
@@ -170,30 +148,22 @@ const TodoList = ({ route }) => {
           onPress={() => setModalVisible(true)}
         />
       </View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-      >
+      <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <TextInput
-              style={{
-                height: 40,
-                borderColor: "gray",
-                borderWidth: 1,
-                borderRadius: 5,
-                width: "100%",
-                textAlign: "center",
-              }}
+              style={styles.inputNewTodo}
               autoFocus={true}
               onSubmitEditing={addItemTodo}
               onChangeText={(text) => setNewTodo(text)}
               value={newTodo}
             />
-            <Button title="Annuler" onPress={() => {
+            <Button
+              title="Annuler"
+              onPress={() => {
                 setModalVisible(!modalVisible);
-              }}/>
+              }}
+            />
           </View>
         </View>
       </Modal>
@@ -202,20 +172,22 @@ const TodoList = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    flexWrap: "wrap",
-    marginTop: 35,
-    marginBottom: 115,
-    padding: 15,
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: height,
   },
-  actionText: {
-    color: "white",
-    fontSize: 16,
-    backgroundColor: "transparent",
-    padding: 10,
+  titleContainer: {
+    position: "absolute",
+    top: 0,
+    width: width,
+    height: 50,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
+  titleFont: { fontSize: 26, color: "#5C5C5C", fontWeight: "600" },
   rightAction: {
     alignItems: "center",
     flex: 1,
@@ -230,7 +202,7 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     backgroundColor: "white",
-    width: width ,
+    width: width,
     borderRadius: 5,
     padding: 25,
     alignItems: "center",
@@ -248,6 +220,28 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 6,
     elevation: 2,
+  },
+  inputNewTodo: {
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 5,
+    width: "100%",
+    textAlign: "center",
+  },
+  scrollView: {
+    marginTop: 50,
+    width: width
+  },
+  newTodoButton: {
+    position: "absolute",
+    bottom: 125,
+    right: 20,
+    width: 60,
+    height: 60,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  ScrollView,
-  Dimensions,
-  Pressable,
-  Text,
-} from "react-native";
+import { View, ScrollView, Dimensions, Pressable, Text } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
 const { width, height } = Dimensions.get("screen");
@@ -23,7 +17,7 @@ const HomeScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={{ minHeight: height}}>
+    <View style={{ minHeight: height }}>
       {isEditing && (
         <Pressable
           style={{
@@ -34,11 +28,13 @@ const HomeScreen = ({ navigation }) => {
             flexDirection: "row",
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "#c6def1"
+            backgroundColor: "#c6def1",
           }}
           onPress={() => setIsEditing(false)}
         >
-          <Text style={{color: "#6E6E6E", fontSize: 20, fontWeight: "700"}}>Annuler</Text>
+          <Text style={{ color: "#6E6E6E", fontSize: 20, fontWeight: "700" }}>
+            Annuler
+          </Text>
         </Pressable>
       )}
       {!isEditing && (
@@ -53,7 +49,16 @@ const HomeScreen = ({ navigation }) => {
             alignItems: "center",
           }}
         >
-          <Text style={{color: "#6E6E6E", fontSize: 16, fontWeight: "700"}}>Pssst reste appuyé sur une liste pour la supprimer </Text>
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#6E6E6E",
+              fontSize: 16,
+              fontWeight: "700",
+            }}
+          >
+            Pssst reste appuyé sur une liste pour la supprimer{" "}
+          </Text>
         </Pressable>
       )}
 
@@ -75,7 +80,8 @@ const HomeScreen = ({ navigation }) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-        }}>
+        }}
+      >
         <Ionicons
           name="add-circle-outline"
           size={45}
