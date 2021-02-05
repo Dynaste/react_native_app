@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Button,
@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import IconContainer from "./../components/IconContainer";
 import ColorContainer from "../components/ColorContainer";
@@ -24,26 +24,6 @@ const NewList = ({ navigation }) => {
   });
   const [title, setTitle] = React.useState("");
 
-  const todos = useSelector((state) => state.todosList.todosList);
-
-  useEffect(()=>{
-    console.log(todos);
-  },[todos])
-
-
-  const setPref = (choice) => {
-    if (choice.includes("#")) {
-      setUserChoice({
-        ...userChoice,
-        color: choice,
-      });
-    } else {
-      setUserChoice({
-        ...userChoice,
-        icon: choice,
-      });
-    }
-  };
 
   function modifyStore(type, payload) {
     dispatch({ type: type, payload: payload });
@@ -107,7 +87,7 @@ const NewList = ({ navigation }) => {
         <IconContainer userChoice={userChoice} setUserChoice={setUserChoice} />
 
         <View style={{ marginTop: 50 }}>
-          <Button title="Créer la liste" onPress={() => addTodo()} />
+          <Button color="#5C5C5C" title="Créer la liste" onPress={() => addTodo()} />
         </View>
       </ScrollView>
     </View>

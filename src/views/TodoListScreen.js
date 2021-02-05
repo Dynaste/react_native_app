@@ -51,7 +51,7 @@ const TodoList = ({ route }) => {
     setIsSwipe({
       ...isSwipe,
       myText: "Validation",
-      backgroundColor: "#faedcb",
+      backgroundColor: "#c9e4de",
     });
     let sendableObj = {
       id: id,

@@ -60,11 +60,11 @@ const HomeScreen = ({ navigation }) => {
             style={{
               textAlign: "center",
               color: "#6E6E6E",
-              fontSize: 16,
+              fontSize: 15,
               fontWeight: "700",
             }}
           >
-            Pssst reste appuyé sur une liste pour la supprimer{" "}
+            Pssst restes appuyé sur une liste pour la supprimer{" "}
           </Text>
         </Pressable>
       )}
@@ -76,7 +76,7 @@ const HomeScreen = ({ navigation }) => {
           setIsEditing={setIsEditing}
         />
         {
-          isEditing && <Button title="Tout supprimer" onPress={() => modifyStore("reset_todo", {}, setIsEditing(false))} />
+          isEditing && <Button color="#ff686b" title="Tout supprimer" onPress={() => modifyStore("reset_todo", {}, setIsEditing(false))} />
         }
         
       </ScrollView>
