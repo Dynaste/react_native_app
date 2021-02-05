@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import IconContainer from "./../components/IconContainer";
 import ColorContainer from "../components/ColorContainer";
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 const NewList = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -66,7 +66,6 @@ const NewList = ({ navigation }) => {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center", paddingBottom: 25}}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Button title="reset" onPress={()=>modifyStore("reset_todo", {})}/>
         <View
           style={{
             flex: 1,

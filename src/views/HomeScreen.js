@@ -1,13 +1,20 @@
 import React, { useState } from "react";
-import { View, ScrollView, Dimensions, Pressable, Text } from "react-native";
+import { View, ScrollView, Dimensions, Pressable, Text, Button } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
 const { width, height } = Dimensions.get("screen");
 
 import CardList from "./../components/CardList";
 
+import { useDispatch } from "react-redux";
+
 const HomeScreen = ({ navigation }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const dispatch = useDispatch();
+
+  function modifyStore(type, payload) {
+    dispatch({ type: type, payload: payload });
+  }
 
   const showDetailsList = (list) => {
     setIsEditing(false);
@@ -68,7 +75,12 @@ const HomeScreen = ({ navigation }) => {
           isEditing={isEditing}
           setIsEditing={setIsEditing}
         />
+        {
+          isEditing && <Button title="Tout supprimer" onPress={() => modifyStore("reset_todo", {}, setIsEditing(false))} />
+        }
+        
       </ScrollView>
+      
       <View
         style={{
           position: "absolute",
